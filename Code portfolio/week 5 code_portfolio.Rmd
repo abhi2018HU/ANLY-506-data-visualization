@@ -1,0 +1,126 @@
+---
+title: "week 5 code port_folio"
+author: "Abhi"
+date: "June 16, 2019"
+output: html_document
+---
+
+## Matrices and Dataframes
+
+# to create a dataframe/matrix
+
+# cbind(a, b, c)	# this combines vectors as columns in a matrix
+```{r}
+cbind(3:8, 9:14, 15:20)
+```
+
+# rbind(a, b, c)	 # Combine vectors as rows in a matrix	
+```{r}
+rbind(3:8, 9:14, 15:20)
+```
+
+
+# matrix(x, nrow, ncol, byrow)    #	Creates a matrix from a vector x
+
+
+
+
+# data.frame()	 # Creates a dataframe from named columns	
+
+```{r}
+data.frame("age" = c(45, 55), 
+sex = c("m", "f"))
+```
+```{r}
+setwd("C:/Users/A/Desktop/Late Spring @HU/ANLY 506-51- B- Exploratory Data Analytics-Olga/Text books")
+chicago <- readRDS("chicago.rds")
+```
+# matrix and dataframe functions
+
+# head() function # lists the first few observations of the dataframe ,default no.= 6
+``` {r}
+head(chicago)
+```
+# tail() function #  lists the bottom few observations of the dataframe ,default no.= 6
+``` {r}
+tail(chicago)
+```
+# View() functions # displays the full object in a new tab
+``` {r}
+View(chicago)
+```
+# nrow() funtion  # counts the total no. of rows 
+``` {r}
+nrow(chicago)
+```
+# ncol() funtion  # counts the total no. of columns
+``` {r}
+ncol(chicago)
+```
+# dim() function # the dimension functions give the total number of rows and columns
+``` {r}
+dim(chicago)
+```
+# str() function # it shows the structure of the data set ie. the no. of rows and columns and few observations from each column and also the data type for that column
+``` {r}
+str(chicago)
+```
+# summary() function # this gives the 5-number statistical summary for each of the variables and also specifies the no. of NA's in each of them separately
+
+``` {r}
+summary(chicago)
+```
+# names() function   # gives the column names for the dataframe
+``` {r}
+names(chicago)
+```
+# mean() function  # gives the arithmetic mean for the chosen object
+``` {r}
+mean(chicago$tmpd)
+```
+# Adding a new column to a dataframe
+ 
+dataframe$new <- c(a,b,c....)  # adds a new column called 'new' to the data frame with the data point as a,b,c....
+
+``` {r}
+chicago$new <- c(1:6940)
+```
+# Changing column names
+
+names(dataframe)[3] <- "z"  # this changes the name of the 3rd column to 'z' 
+
+names(dataframe)[names(dataframe) == "old.name"] <- "new.name" #  better approach to avoid errors
+``` {r}
+names(chicago)[names(chicago) == "new"] <- "very_new"
+str(chicago)
+```
+
+# Slicing the dataframe
+
+1.dataframe[3,] # returns the observations in 3rd row and all the columns
+
+2.dataframe[ , 5] # returns the observations for all the rows but only the 5th column
+
+3.dataframe[40:100,3:8] # returns the observations in rows 40th to 100 for columns 3rd to 8th
+``` {r}
+chicago[20:25,2:4]
+```
+4.dataframe_new <- dataframe[dataframe$a < 50 & dataframe$b > 40]  # using logical operator with specific conditions on columns "a" and "b" by the use of AND logic
+``` {r}
+chicago_new <- chicago["tmpd" > 50 & "dptp" <40]
+head(chicago_new)
+```
+
+5.subset() function for slicing
+
+subset(x = dataframe,
+      subset = a< 20 &
+               b == 5 &
+               c >= 10)   # slicing out a subset from the main dataframe using logical conditions on differen columns/variable wiz. a,b,c
+
+``` {r}
+a = subset( chicago,subset = chicago$tmpd >50 & chicago$dptp < 40)
+head(a)
+```               
+               
+               

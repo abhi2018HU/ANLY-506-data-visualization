@@ -1,0 +1,61 @@
+---
+title: "dplyr_codeport_folio"
+author: "Abhi"
+date: "June 13, 2019"
+output: html_document
+---
+## dplyr package
+
+```{r}
+library(dplyr)           ## to make dplyr the current library
+
+chicago <- readRDS("chicago.rds")   ## to load the air quality data as a data frame called "chicago"
+```
+
+
+```{r}
+dim(chicago)      ## to get the dimensions of our data frame ie. no. of rows and columns
+```
+
+```{r}
+str(chicago)      ##  to get the basic charecterestics of the data like variable type and few observations
+```
+
+## select() function
+
+```{r}
+onlyfirsttwocolumns <- select(chicago,1:2) ## this selects a subset containing only the first two columns of the chicago dataframe
+```
+```{r}
+head(onlyfirsttwocolumns)  ## to get the first six rows of our selected subset of chicago
+tail(onlyfirsttwocolumns)  ## to get the last six rows of our selected subset of chicago
+```
+```{r}
+exceptfirsttwo <- select(chicago,-(1:2))  ## this selects a subset containing every other column except the first two columns of the chicago dataframe
+startswithp <- select(chicago, starts_with("p")) ## selects a subset of all the variables starting with "P"
+head(startswithp)  
+```
+
+## filter function
+```{r}
+chic.f <- filter(chicago, no2tmean2 > 25 & tmpd > 85) ## it filters the rows where no2tmean2 > 25 and tmpd > 85
+ 
+select(chic.f, date, tmpd, no2tmean2)  ## we get 14 observations with specific dates and values
+```
+ 
+
+##rename function
+ 
+ ```{r}
+head(chicago)
+chicago <- rename(chicago,dewpoint = dptp) ## using the rename function to change the variable name from dptp to dewpoint
+
+ ``` 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 

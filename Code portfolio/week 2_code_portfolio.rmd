@@ -1,0 +1,90 @@
+---
+title: "week 2"
+author: "Abhi"
+date: "June 13, 2019"
+output: html_document
+---
+
+
+## Data Types in R
+
+
+Different data types in R are- :
+1.Numeric
+2.Integer
+3.Complex
+4.Logical
+5.Charecter
+
+## Numeric data type
+
+Decimal values are called numerics in R. 
+It is the default computational data type.
+
+```{r}
+x = 5.5       # assigns a decimal value 
+x              # prints the value of x 
+class(x)    # prints the type of data stored in the variable x
+```
+
+## Integer data type
+since the default data to store numerals is Decimal in R,to store a value as an integer we have to invoke the integer() function
+
+```{r}
+I = as.integer(7) 
+I            # print the value of I
+class(I)      # prints the class of the variable I
+is.integer(I)  # This gives the answer to whether the variable I an integer? 
+```
+
+we can also state a variable as an integer by suffixing L 
+```{r}
+y= 7L
+class(y)
+```
+
+## Complex Data type
+
+A complex value in R is defined via the pure imaginary value i
+
+```{r}
+z= 1 + 5i # this defines the variable z with the real part = 1 and the imaginary part = 5
+class(z) # this tell the type of the variable z
+```
+
+
+## Logical Data type
+
+A logical value is often created via comparison between variables
+```{r}
+a = 2  # assigning random values to variables a and b
+b = 4
+a>b    # checking their relationship
+```
+
+## Charecter Data Type
+
+A character object is used to represent string values in R. 
+
+```{r}
+c = as.character(2.78) 
+c
+class(c) # prints the class of the variable
+```
+
+
+
+
+## String function
+
+
+The string function gives the no. of rows and columns in the dataframe and also displays the data class for each column along with a few observations
+```{r}
+chicago <- readRDS("chicago.rds")   ## to load the air quality data as a data frame called "chicago"
+str(chicago) 
+```
+
+
+
+
+

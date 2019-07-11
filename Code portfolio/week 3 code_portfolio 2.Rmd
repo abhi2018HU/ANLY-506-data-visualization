@@ -1,0 +1,63 @@
+---
+title: "week 3 code_portfolio"
+author: "Abhi"
+date: "June 16, 2019"
+output: html_document
+---
+#Workspace management functions
+
+# ls() function  # this displays all the objects in current workspace
+```{r}
+ls()
+```
+rm(x,y,z,.....) # this removes the objects named 'x','y','z'... from the current workspace
+rm(list = ls()) # removes all the objects from the workspace
+
+getwd() function # displays the current working directory
+``` {r}
+getwd()
+```
+
+1.setwd(file = "dir) # changes the working directory to a desired location
+
+2.list.files() # returns the list of all files in the current working directory
+
+3.save(a, b, .., file = "myimage.RData)	# this saves objects a, b, . to myimage.RData
+
+4.save.image(file = "myimage.RData")	#Saves all objects in your workspace to myimage.RData
+
+5.load(file = "myimage.RData")	# this Loads objects in the file myimage.RData
+
+
+
+
+##loading a text file into R
+
+
+
+read.table(file = "mydata.txt", sep, header)	    # this reads a ".txt"" file named "mydata.txt", and we can set how columns are separated with "sep" ie. sep = "," for comma-delimited files, and sep = "\t" for tab-delimited files and header = TRUE sets a specific header column
+
+
+
+
+
+
+# Exporting objects as text file
+
+
+
+
+ write.table(x = object,
+            file = "mytext.txt",  # Saving the file as mytext.txt
+            sep = "\t" /",")   # saving as a comma-separated file or a tab-delimited file
+
+
+
+
+    
+# Loading data from a website
+
+# fromweb <- read.table(file = 'the url link of the website',sep = '\t', header = TRUE)
+                      
+                      
+            

@@ -1,0 +1,64 @@
+---
+title: "week 10 code_portfolio"
+author: "Abhi"
+date: "July 05, 2019"
+output: html_document
+---
+#To calculate different distances in R
+
+```{r}
+fa <- c(5,2,1,4)
+fb <- c(5,5,4,2)
+fm <- matrix(c(fa,fb), byrow=T, nrow=2)
+```
+
+## Manhattan distance
+```{r}
+dist(fm, method = "manhattan")
+```
+
+## Euclidean distance
+```{r}
+dist(fm, method = "euclidean")
+```
+
+
+# Clustering
+
+## Heirarchial clustering
+
+```{r warning=FALSE , message=FALSE , error=FALSE}
+library(dplyr)
+```
+
+```{r}
+set.seed(50)
+x <- rnorm(12, rep(1:3, each = 4), 0.2)
+y <- rnorm(12, rep(c(1, 2, 1), each = 4), 0.2)
+dataFrame <- data.frame(x=x, y=y)
+hcluster <- dist(dataFrame) %>% hclust
+dendro <- as.dendrogram(hcluster)
+hClustering <- data.frame(x=x,y=y) %>% dist %>% hclust
+plot(hClustering)
+```
+
+### Heat map function
+```{r}
+dataMatrix <- data.frame(x=x,y=y) %>% data.matrix
+heatmap(dataMatrix)
+```
+
+## k-means clustering
+```{r}
+set.seed(50)
+x <- rnorm(12, mean = rep(1:3, each = 4), sd = 0.2)
+y <- rnorm(12, mean = rep(c(1, 2, 1), each = 4), sd = 0.2)
+dataFrame <- data.frame(x, y)
+kmeansObj <- kmeans(dataFrame, centers = 3)
+names(kmeansObj)
+kmeansObj$cluster # we can see which data points go to which cluster by looking at the "cluster" element from the list generated
+```
+
+
+
+

@@ -1,0 +1,146 @@
+---
+title: "week 7_code_portfolio"
+author: "Abhi"
+date: "July 2, 2019"
+output: html_document
+---
+
+```{r warning=FALSE , message=FALSE , error=FALSE}
+library(tidyverse)
+```
+
+# Graphing template 
+
+###  ggplot(data = <DATA>) +  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) # <DATA> represents the data to be plotted , <GEOM_FUNCTION> refers to the Geometric Function used for plotting and aes refers to the aesthetics like size,shape and colour of the points
+
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+### Here we use data = mpg which is build in R, on the x-axis "displ" which is the engine size in litres and "hwy" which is the fuel efficiency on the highway
+
+
+## Adding another variable 
+
+###By colour
+
+We can add one more variable from the data set in the form of different colors for different values
+
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+Here we add the variable "class" represented by the different colors.
+ggplot will add a unique color to each unique value of the class variable and will also automatically display a legend for the same.
+
+
+###By size
+
+Here we add the variable "class" represented by the different sizes of the plotting points.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, size = class))
+```
+
+### By transparency of the points (alpha)
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
+```
+
+### By shape
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+```
+
+### By facets
+
+We can add extra discrete variables by adding facets or subplots that each display one subset of the data
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+
+## Geometric Objects
+
+Geometric objects or Geom are used by the plot to represent data
+
+### Geom as a point
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+### Geom as a smooth line
+
+```{r}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+```
+
+### Adding variables by line type
+
+```{r}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv))
+```
+
+### Adding variables by colour of lines
+
+```{r}
+ggplot(data = mpg) +
+  geom_smooth(
+    mapping = aes(x = displ, y = hwy, color = drv),
+    show.legend = FALSE)
+    ```
+    
+### Adding multiple Geoms to the plot
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+```
+
+
+## Colour and Fill 
+We can use colour and fill aesthethics in a bar plot to simultaneously show 2 variables
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+```
+
+
+## Coordinate systems in ggplot
+
+### coord_flip() 
+This command just switches the x and y axes
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
+  geom_boxplot()
+```
+A normal boxplot
+ 
+ 
+```{r}
+ ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
+  geom_boxplot() +
+  coord_flip()
+```
+A horizontal boxplot by coord_flip()
+
+  
+  
+  

@@ -1,0 +1,57 @@
+---
+title: "week 8"
+author: "Abhi"
+date: "July 03, 2019"
+output: html_document
+---
+```{r warning=FALSE , message=FALSE , error=FALSE}
+library(tidyverse)
+```
+# Visualizing Distributions
+
+## For Categorical variables
+
+We can use a simple barplot for the categorical variable "cut"
+```{r}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+```
+Here the height of the bars show the count for each variable
+
+## For continous variables
+
+```{r}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+```
+Here a histogram is used to represent the continous variable "carat" and the width of the intervals is set by the arguement "binwith"
+
+### Using geom_freqpoly()
+
+```{r}
+smaller <- diamonds %>% 
+filter(carat < 3)
+ggplot(data = smaller, mapping = aes(x = carat, colour = cut)) +
+geom_freqpoly(binwidth = 0.1)
+```
+
+Here the overlapping lines are easier to understand
+
+
+
+# The Lattice system
+By the lattice system plots are created by a single call and much information about multi-dimensional data can be represented
+
+```{r warning=FALSE , message=FALSE , error=FALSE}
+library(lattice)
+```
+
+```{r}
+state <- data.frame(state.x77, region = state.region)
+xyplot(Life.Exp ~ Income | region, data = state, layout = c(4, 1))
+```
+
+This plot contains 4 panels- one for each geographical reason showing the relation between income and life expectancy
+
+
+
