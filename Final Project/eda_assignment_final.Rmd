@@ -1,0 +1,242 @@
+---
+title: "EDA Assignment"
+author: "Abhi"
+date: "July 11, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+
+mydata <- read.csv("gapminder.csv")
+
+```
+
+## Data Description
+
+life = life expectancy
+income = gdp per capita
+year = the corresponding year for the data shown
+county = different countries 
+region = location of the mentioned countries
+population = census data collected about every 10 years
+
+### Data summary
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE,eval=FALSE}
+dim(mydata)
+str(mydata)
+summary(mydata)
+```
+
+No. of observations = 41284
+No. of variables = 7
+
+Type of variables -:
+country - factor variable showing 197 different countries
+year - integer variable having a range from 1800 to 2015
+life - numeric variable having a range from 1.0 year to 84.10 years
+population - factor variable with 15260 levels
+income - integer variable having a range from 1$ to 182668$ 
+region - factor variable dividing the regions of the world into 6 commonly accepted geographical locations
+
+### Pre-processing the data
+The data used is not normalized or standardized because only first order data visualization is our aim and to find for definite trends .
+
+## Questions :-
+
+1.	Which countries in Europe and Central Asia were impacted most by WW1 and WW2 in terms of        Life Expectacy and drop in per capita income?
+2.	Was the impact on life more than the income?
+3.	Which countries showed the quickest recovery after the wars in terms of economic                development?
+
+
+## Data wrangling 
+
+We can see a lot of blank values in the population column. It is because earlier the census were done once in 10 years.
+For the ease of analysis here we assume the population to be constant till the next survey is done.
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+mydata$population1 <- as.numeric(gsub(",","",mydata$population))
+library(zoo)
+mydata$population1 <- na.locf(mydata$population1)
+mydata$income <- na.locf(mydata$income)
+mydata$population <- mydata$population1
+mydata1 <- mydata
+```
+
+
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+
+library(tidyverse)
+library(dplyr)
+mydata1_europeww1 <- mydata1[mydata1$Year > 1913 , ]
+mydata1_europeww1a <- mydata1_europeww1[mydata1_europeww1$Year < 1920 , ]
+mydata1_europeww1b <- mydata1_europeww1a[mydata1_europeww1a$region == "Europe & Central Asia" , ]
+```
+
+## Cluster Analysis
+
+### Finding the optimum number of clusters by 
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+
+mydata1_europenCA <- filter(mydata1, region == "Europe & Central Asia")
+mydata1_europenCA_cluster <- select(mydata1_europenCA, income, life)
+```
+
+###  A) Silhouette Method
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+
+library(tidyverse)
+library(cluster)  
+library(factoextra)
+set.seed(123)
+fviz_nbclust(mydata1_europenCA_cluster, kmeans, method = "silhouette") 
+```
+
+
+### B) Elbow Method
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+fviz_nbclust(mydata1_europenCA_cluster, kmeans, method = "wss")
+```
+
+
+By applying the above methods to determine the optimum number of clusters we see that we can chose both 2 and 3 as the number of clusters.
+
+###Visualizing with both 2 and 3 clusters
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+Clusetrs_no_2 <- kmeans(mydata1_europenCA_cluster, centers = 2)
+Clusters_no_3 <- kmeans(mydata1_europenCA_cluster, centers = 3)
+
+fviz_cluster(Clusetrs_no_2, geom = "point", data = mydata1_europenCA_cluster) + ggtitle("2 Clusters") +  xlab("Income") + ylab("Life Expectancy") + labs(title = "Cluster Analysis with 2 clusters")
+
+fviz_cluster(Clusters_no_3, geom = "point", data = mydata1_europenCA_cluster) + ggtitle("3 Clusters") +  xlab("Income") + ylab("Life Expectancy") + labs(title = "Cluster Analysis with 3 clusters")
+```
+
+We can look at the plot with 3 clusters and say that it divides the data into 3 different regions -:
+
+a) lowere income region (red)
+b) middle income regions (green)
+c) higher income regions(blue)
+
+We can separate these regions and can do further analysis.
+
+
+
+## Impact on different European and Central Asian countries during War years 
+
+### Impact on Life expectancy for WW1
+
+```{r echo = FALSE,message = FALSE,warning = FALSE,error = FALSE}
+ggplot(data = mydata1_europeww1b) + 
+ geom_point(mapping = aes(x = Year, y = life)) + 
+   facet_wrap(~ Country, nrow = 4)
+```
+From the above plots of Life expectancy during the WW1 years for different European and Central Asian countries countries, we can see that :
+
+1.Considerable drop of life expectancies for Armenia,Albania,Austria,Azerbaizan,Belarus,Belgium,Bosnia and Herzegovina,Bulgaria,Croatia,Estonia,Finland,France,Georgia,Greece,Hungary,Italy,Kazakhastan,Latvia,Lithuania,Russia,Serbia,Slovenia,Spain,Tazikistan,Turkey,Ukraine,United Kingdom and Uzbekistan.
+
+2. Also we can notice that the hardest hit countries were Belarus,Estonia,France,Germany,Italy,Russia,Serbia,Ukraine,United Kingdom and Uzbekistan.
+
+
+
+### Impact on Per capita Income for WW1
+
+```{r eval = TRUE,echo = FALSE,warning=FALSE,error=FALSE}
+ggplot(data = mydata1_europeww1b) + 
+   geom_point(mapping = aes(x = Year, y = income)) + 
+  facet_wrap(~ Country, nrow = 4)
+```
+
+From the above plots ofPer capita income during the WW1 years for different European and Central Asian countries , we can see that :
+
+1.There was significant decline in income for Austria,Belgium,Denmark,Kazakhastan,Latvia,Netherlands,Russia and Ukraine
+2. We dont see such a dramatic impact on income as we earlier saw as in life expectancies.
+
+## Economic recovery after WW1 for the hardest hit countries
+
+```{r eval = TRUE,echo = FALSE,warning=FALSE,error=FALSE}
+mydata1_europeww1_r <- mydata1[mydata1$Year > 1920 , ]
+mydata1_europeww1a_r <- mydata1_europeww1_r[mydata1_europeww1_r$Year < 1930 , ]
+mydata1_europeww1b_r <- mydata1_europeww1a_r[mydata1_europeww1a_r$region =="Europe & Central Asia" , ]
+ggplot(data = mydata1_europeww1b_r) + 
+     geom_point(mapping = aes(x = Year, y = income)) +     facet_wrap(~ Country, nrow = 4)
+```
+
+Looking at the Per capita income for the hardest hit countries in WW1 for the next decade (1920-30), we see:
+
+1.Rapid increase in income for Austria,Belgium,Denmark and Russia.
+
+
+### Subsetting data for WW2(1939 - 1945)
+```{r}
+mydata1_europeww2 <- mydata1[mydata$Year > 1938 , ]
+mydata1_europeww2a <- mydata1_europeww2[mydata1_europeww2$Year < 1946 , ]
+mydata1_europeww2b <- mydata1_europeww2a[mydata1_europeww2a$region == "Europe & Central Asia" , ]
+```
+
+
+### Impact on Life expectancy
+
+```{r eval = TRUE,echo = FALSE,warning=FALSE,error=FALSE}
+ggplot(data = mydata1_europeww2b) + 
+ geom_point(mapping = aes(x = Year, y = life)) + 
+   facet_wrap(~ Country, nrow = 4)
+```
+
+From the above plots of Life expectancy during the WW2 years for different European and Central Asian countries countries, we can see that :
+
+1.Significant decline in Armenia,Austria,Azerbaizan,Bosnia and Herzegovina,Croatia,Estonia,Georgia,France,Germany,Greece,Hungary,Kazakhastan,Latvia,Lithuania,Luxemberg,Moldova,Poland,Romania,Russia,Slovak Republic,Tazikistan,Ukraine and Uzbekistan
+
+2. We see the hardest hit countries were Austria,Azerbaizan,Bosnia and Herzegovina,Georgia,Germany,Greece,Latvia,Poland,Russia,Ukraine and Uzbekista
+
+
+### Impact on Per capita Income
+
+```{r eval = TRUE,echo = FALSE,warning=FALSE,error=FALSE}
+ggplot(data = mydata1_europeww2b) + 
+ geom_point(mapping = aes(x = Year, y = income)) + 
+   facet_wrap(~ Country, nrow = 4)
+```
+
+From the above plots ofPer capita income during the WW2 years for different European and Central Asian countries, we can see that :
+
+1.There was significant decline in income for Belgium,Denmark,Greece,Italy,Netherlands and Poland.
+
+2.Comparing these plots (on the considered scales of life expectancy and income) with the life expectanciy plots we again find that the impact on life was greater than on incomne.
+
+## Economic recovery after WW2 in Europe
+
+To appreciate the economic recovery after WW2 we select a time period of 15 years after the war .(1945-59)
+
+```{r eval = TRUE,echo = FALSE,warning=FALSE,error=FALSE}
+
+mydata1_europeww2_r <- mydata1[mydata1$Year > 1945 , ]
+mydata1_europeww2a_r <- mydata1_europeww2_r[mydata1_europeww2_r$Year < 1960 , ]
+mydata1_europeww2b_r <- mydata1_europeww2a_r[mydata1_europeww2a_r$region =="Europe & Central Asia" , ]
+ggplot(data = mydata1_europeww2b_r) + 
+     geom_point(mapping = aes(x = Year, y = income)) +     facet_wrap(~ Country, nrow = 4)
+```
+
+
+From the above plots we can see :
+1. Rapid increase in Percapita income signalling an economic recovery in all of the  European countries.
+2.We see a steepest rise in income for Austria,Belgium,Denmark, Germany, Luxemburg,Netherlands,Sweden and Switzerland.
+
+
+## Summary
+By looking our the data we can very well confirm the generally believed perception that the World Wars were the most catastrophic events in recent history.
+The impact on life was much greater than the economy during both the wars but also the resilient charecter of humans should be appreciated which can be seen in the economic recovery and increase in Life expectancy after the wars.
+
+
+
+
+
+
+
+
