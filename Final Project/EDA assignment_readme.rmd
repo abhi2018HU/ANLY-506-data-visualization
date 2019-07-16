@@ -1,0 +1,17 @@
+The dataset gapminder.csv contains the following information for the countries of the world -:
+
+Dataset - gapminder.csv
+•	life = life expectancy
+•	income = gdp per capita
+•	year
+•	county
+•	region
+•	population - census data collected about every 10 years
+
+
+Questions :-
+1.	Which countries were impacted most by WW1 and WW2?
+2.	Was the impact on life more than the income?
+3.	Which countries showed the quickest recovery after WW2?
+	
+
